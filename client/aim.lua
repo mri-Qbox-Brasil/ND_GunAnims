@@ -7,6 +7,7 @@ local animations = {
 }
 
 local function setAimAnim(anim)
+    if not anim then return end
     anim = anim:lower()
     if not animations[anim] then return end
     local state = LocalPlayer.state
