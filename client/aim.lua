@@ -7,9 +7,9 @@ local animations = {
 }
 
 local function setAimAnim(anim)
-    anim = anim and animations[anim:lower()]
     if not anim then return end
-    
+    anim = anim:lower()
+    if not animations[anim] then return end
     local state = LocalPlayer.state
     state:set("weaponAnimOverride", anim, true)
 end
@@ -17,7 +17,7 @@ end
 AddStateBagChangeHandler("weaponAnimOverride", nil, function(bagName, key, value, reserved, replicated)
     local ply = GetPlayerFromStateBagName(bagName)
     if ply == 0 or replicated or not value then return end
-    SetWeaponAnimationOverride(GetPlayerPed(ply), value or `Default`)
+    SetWeaponAnimationOverride(GetPlayerPed(ply), animations[value] or `Default`)
 end)
 
 lib.onCache("ped", function(value)
@@ -41,5 +41,5 @@ end
 exports("setAimAnim", setAimAnim)
 
 exports("getAimAnim", function()
-    return LocalPlayer.state.weaponAnimOverride or animations["default"]
+    return LocalPlayer.state.weaponAnimOverride or "default"
 end)
